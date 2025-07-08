@@ -188,7 +188,8 @@ export default function () {
 	// console.log("user_token",token_user)
 
 	// Step 4 : auth using OTP
-	console.log("---- Auth using OTP start from", formatTimestamp(Date.now())) // perlu datetime pencatatan sampai dapat response
+	const startTimeAuth = Date.now();
+	console.log("---- Auth using OTP start from", formatTimestamp(startTimeAuth)) // perlu datetime pencatatan sampai dapat response
 	console.log("Processing Auth")
 	const params = {
 		headers: {
@@ -206,9 +207,13 @@ export default function () {
 	console.log(auth_hash_url_complete)
 	const res_auth = http.post(auth_hash_url_complete,JSON.stringify(bodyAuth),params)
 	console.log(res_auth.body)
-	console.log("---- Auth using OTP end at", formatTimestamp(Date.now())) // perlu datetime pencatatan sampai dapat response
+	const stopTimeAuth = Date.now();
+	console.log("---- Auth using OTP end at", formatTimestamp(stopTimeAuth)) // perlu datetime pencatatan sampai dapat response
+	console.log("---- Time taken for auth using OTP: ", (stopTimeAuth - startTimeAuth) / 1000, "seconds")
 
 	// Step 5: Execute Sign
+	const startTimeExecute = Date.now();
+	console.log("---- Execute Sign start from", formatTimestamp(startTimeExecute)) // perlu datetime pencatatan sampai dapat response
 
 	console.log("Melakukan Execute Sign")
 	const bodyExecute = {
@@ -218,8 +223,13 @@ export default function () {
 	// ---- 
 	const executedSign = executeSigning(vars.accessToken,JSON.stringify(bodyExecute))
 	console.log(executedSign.body)
+	const stopTimeExecute = Date.now();
+	console.log("---- Execute Sign end at", formatTimestamp(stopTimeExecute)) // perlu datetime pencatatan sampai dapat response
+	console.log("---- Time taken for execute sign: ", (stopTimeExecute - startTimeExecute) / 1000, "seconds")
 
 	// Step 6 : Check Sign Status
+	const startTimeCheckStatus = Date.now();
+	console.log("---- Check Sign Status start from", formatTimestamp(startTimeCheckStatus)) // perlu datetime pencatatan sampai dapat response
 	console.log("Pengecekan sign status")
 	const bodySignStatus = {
 		request_id: vars.requestId
@@ -240,6 +250,9 @@ export default function () {
 		console.log(`pengecekan status ke : ${counter} \n`, message)
 		sleep(5)
 	}
+	const stopTimeCheckStatus = Date.now();
+	console.log("---- Check Sign Status end at", formatTimestamp(stopTimeCheckStatus)) // perlu datetime pencatatan sampai dapat response
+	console.log("---- Time taken for check sign status: ", (stopTimeCheckStatus - startTimeCheckStatus) / 1000, "seconds")
 }
 
 // Helper function to upload a file
