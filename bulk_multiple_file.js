@@ -52,7 +52,7 @@ const WIDTH = 200;
 const HEIGHT = 100;
 const PAGE_NUMBER = 1;
 const SIGN_PER_DOC = 1;
-const NUMBER_OF_UPLOAD = 100;
+const NUMBER_OF_UPLOAD = 3;
 
 // Sample PDF content as base64 (replace with actual content or binary file)
 // In a real scenario, you'd need to prepare test files to be used by k6
@@ -107,6 +107,8 @@ export default function () {
 	sleep(1); // Add a small delay between requests
 
 	// Step 2: Upload files
+	const startTimeUpload = Date.now();
+	console.log("---- Upload files start from", formatTimestamp(startTimeUpload)) // perlu datetime pencatatan sampai dapat response
 	for (let i = 0; i < NUMBER_OF_UPLOAD; i++) {
 		const uploadResponse = uploadFile(access_token);
 
@@ -138,6 +140,9 @@ export default function () {
 
 		sleep(1); // Add a small delay between uploads
 	}
+	const stopTimeUpload = Date.now();
+	console.log("---- Upload files end at", formatTimestamp(stopTimeUpload)) // perlu datetime pencatatan sampai dapat response
+	console.log("---- Time taken for upload files: ", (stopTimeUpload - startTimeUpload) / 1000, "seconds")
 
 	// Step 3: Create JSON request
 	const jsonRequest = createJsonPayload(vars);
