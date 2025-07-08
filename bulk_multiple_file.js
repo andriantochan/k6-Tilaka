@@ -170,16 +170,16 @@ export default function () {
 	console.log("---- Request sign start from", formatTimestamp(startTimeRequestSign)) // perlu datetime pencatatan sampai dapat response
 
 	const AUTH_URL = requestSigning(vars.accessToken,JSON.stringify(jsonRequest))
-	// console.log("response : ", AUTH_URL.body)
+	console.log("response request sign: ", AUTH_URL.body)
 
 	const stopTimeRequestSign = Date.now();
 	console.log("---- Request sign end at", formatTimestamp(stopTimeRequestSign)) // perlu datetime pencatatan sampai dapat response
 	console.log("---- Time taken for request sign: ", (stopTimeRequestSign - startTimeRequestSign) / 1000, "seconds")
 
-	const parsedAuth = JSON.parse(AUTH_URL.body).auth_urls[0].url
-	const idRsa = parsedAuth.match(/id=([^&]+)/)?.[1];
+	// const parsedAuth = JSON.parse(AUTH_URL.body).auth_urls[0].url
+	// const idRsa = parsedAuth.match(/id=([^&]+)/)?.[1];
 	// console.log("url auth: ",parsedAuth)
-	console.log("id signing : ",idRsa)
+	// console.log("id signing : ",idRsa)
 	console.log("request id : ",vars.requestId)
 
 	// Creating user token
