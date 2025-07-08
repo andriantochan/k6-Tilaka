@@ -49,8 +49,8 @@ const COORD_Y = 0;
 const WIDTH = 200;
 const HEIGHT = 100;
 const PAGE_NUMBER = 1;
-const SIGN_PER_DOC = 4;
-const NUMBER_OF_UPLOAD = 5;
+const SIGN_PER_DOC = 1;
+const NUMBER_OF_UPLOAD = 1;
 
 // Sample PDF content as base64 (replace with actual content or binary file)
 // In a real scenario, you'd need to prepare test files to be used by k6
@@ -139,31 +139,31 @@ export default function () {
 
 	// Step 3: Create JSON request
 	const jsonRequest = createJsonPayload(vars);
-	console.log(typeof(jsonRequest))
-	if (vars.uploadedFiles.length > 0) {
-		try {
-			// Convert JSON object to string with pretty formatting
-			// const jsonString = JSON.stringify(jsonRequest, null, 2);
+	// console.log(typeof(jsonRequest))
+	// if (vars.uploadedFiles.length > 0) {
+	// 	try {
+	// 		// Convert JSON object to string with pretty formatting
+	// 		// const jsonString = JSON.stringify(jsonRequest, null, 2);
 
-			// Log success metrics
-			console.log(`Successfully created request with ID: ${vars.requestId}`);
-			console.log(`Uploaded ${vars.uploadedFiles.length} files`);
-		  } catch (error) {
-			console.error(`Error writing JSON file: ${error}`);
-		  }
+	// 		// Log success metrics
+	// 		console.log(`Successfully created request with ID: ${vars.requestId}`);
+	// 		console.log(`Uploaded ${vars.uploadedFiles.length} files`);
+	// 	  } catch (error) {
+	// 		console.error(`Error writing JSON file: ${error}`);
+	// 	  }
 
-		// Log success metrics
-		console.log(`Successfully created request with ID: ${vars.requestId}`);
-		console.log(`Uploaded ${vars.uploadedFiles.length} files`);
+	// 	// Log success metrics
+	// 	console.log(`Successfully created request with ID: ${vars.requestId}`);
+	// 	console.log(`Uploaded ${vars.uploadedFiles.length} files`);
 
-	}
+	// }
 
 	// Step 4: Request Sign
 	const startTimeRequestSign = Date.now();
 	console.log("---- Request sign start from", formatTimestamp(startTimeRequestSign)) // perlu datetime pencatatan sampai dapat response
 
 	const AUTH_URL = requestSigning(vars.accessToken,JSON.stringify(jsonRequest))
-	console.log("response : ", AUTH_URL.body)
+	// console.log("response : ", AUTH_URL.body)
 
 	const stopTimeRequestSign = Date.now();
 	console.log("---- Request sign end at", formatTimestamp(stopTimeRequestSign)) // perlu datetime pencatatan sampai dapat response
@@ -171,8 +171,9 @@ export default function () {
 
 	const parsedAuth = JSON.parse(AUTH_URL.body).auth_urls[0].url
 	const idRsa = parsedAuth.match(/id=([^&]+)/)?.[1];
-	console.log("url auth: ",parsedAuth)
+	// console.log("url auth: ",parsedAuth)
 	console.log("id signing : ",idRsa)
+	console.log("request id : ",vars.requestId)
 
 	// Creating user token
 	console.log("Creating user token")
@@ -204,7 +205,7 @@ export default function () {
 		otp_pin: "985070"
 	}
 	const auth_hash_url_complete = AUTH_HASH_URL+`user=${vars.userIdentifier}&id=${idRsa}&channel_id=${CLIENT_ID}`
-	console.log(auth_hash_url_complete)
+	// console.log(auth_hash_url_complete)
 	const res_auth = http.post(auth_hash_url_complete,JSON.stringify(bodyAuth),params)
 	console.log(res_auth.body)
 	const stopTimeAuth = Date.now();
@@ -222,7 +223,7 @@ export default function () {
 	}
 	// ---- 
 	const executedSign = executeSigning(vars.accessToken,JSON.stringify(bodyExecute))
-	console.log(executedSign.body)
+	// console.log(executedSign.body)
 	const stopTimeExecute = Date.now();
 	console.log("---- Execute Sign end at", formatTimestamp(stopTimeExecute)) // perlu datetime pencatatan sampai dapat response
 	console.log("---- Time taken for execute sign: ", (stopTimeExecute - startTimeExecute) / 1000, "seconds")
@@ -242,13 +243,13 @@ export default function () {
 	let counter = 1
 	let max_counter = 10
 
-	while(message!="DONE" && counter<=max_counter){
+	while(message!="DONE" && true){
 		counter++
 		signedStatus = checkSignStatus(vars.accessToken,JSON.stringify(bodySignStatus))
 		signedStatusBody = signedStatus.body
 	 	message = JSON.parse(signedStatusBody).message
-		console.log(`pengecekan status ke : ${counter} \n`, message)
-		sleep(5)
+		// console.log(`pengecekan status ke : ${counter} \n`, message)
+		sleep(1)
 	}
 	const stopTimeCheckStatus = Date.now();
 	console.log("---- Check Sign Status end at", formatTimestamp(stopTimeCheckStatus)) // perlu datetime pencatatan sampai dapat response
