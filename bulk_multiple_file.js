@@ -13,6 +13,8 @@ export const options = {
 	//   ],
 
 	vus: 1,
+	iterations: 1,
+	duration: '100h',
 	thresholds: {
 		http_req_duration: ["p(95)<2000"], // 95% of requests should be below 2s
 		http_req_failed: ["rate<0.05"], // Less than 5% of requests should fail
@@ -50,7 +52,7 @@ const WIDTH = 200;
 const HEIGHT = 100;
 const PAGE_NUMBER = 1;
 const SIGN_PER_DOC = 1;
-const NUMBER_OF_UPLOAD = 1;
+const NUMBER_OF_UPLOAD = 100;
 
 // Sample PDF content as base64 (replace with actual content or binary file)
 // In a real scenario, you'd need to prepare test files to be used by k6
