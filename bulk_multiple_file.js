@@ -52,7 +52,7 @@ const WIDTH = 200;
 const HEIGHT = 100;
 const PAGE_NUMBER = 1;
 const SIGN_PER_DOC = 1;
-const NUMBER_OF_UPLOAD = 3;
+const NUMBER_OF_UPLOAD = 15;
 
 // Sample PDF content as base64 (replace with actual content or binary file)
 // In a real scenario, you'd need to prepare test files to be used by k6
@@ -176,8 +176,9 @@ export default function () {
 	console.log("---- Request sign end at", formatTimestamp(stopTimeRequestSign)) // perlu datetime pencatatan sampai dapat response
 	console.log("---- Time taken for request sign: ", (stopTimeRequestSign - startTimeRequestSign) / 1000, "seconds")
 
-	// const parsedAuth = JSON.parse(AUTH_URL.body).auth_urls[0].url
-	// const idRsa = parsedAuth.match(/id=([^&]+)/)?.[1];
+	const parsedAuth = JSON.parse(AUTH_URL.body)?.auth_urls[0]?.url
+	const idRsa = parsedAuth?.match(/id=([^&]+)/)?.[1] || null;
+	idRsa === null && console.error("idRsa is null")
 	// console.log("url auth: ",parsedAuth)
 	// console.log("id signing : ",idRsa)
 	console.log("request id : ",vars.requestId)
